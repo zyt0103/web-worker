@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webworker</title>
+</head>
+<body>
+<div id="result"></div>
+<!--<script>-->
+    <!--// 单线程-->
+
+    <!--var i=0;-->
+    <!--var sum =0;-->
+    <!--console.log("Before computing:"+new Date())-->
+    <!--document.getElementById("result").innerHTML +="Before computing:"+new Date()+"<br/>";-->
+    <!--function timedCount(){-->
+        <!--for(var j=0;j<9;j++){-->
+            <!--for(var i=0;i<100000000;i++){-->
+                <!--sum+=i;-->
+            <!--}-->
+            <!--console.log(sum)-->
+        <!--}-->
+        <!--document.getElementById("result").innerHTML +=sum+"<br/>";-->
+    <!--}-->
+    <!--timedCount();-->
+    <!--document.getElementById("result").innerHTML +="After computing:"+new Date()+"<br/>";-->
+    <!--document.getElementById("result").innerHTML +="this is end:"+new Date()+"<br/>";-->
+
+<!--</script>-->
+
+<script>
+
+
+   // if(typeof(Worker)!=="undefined") {
+   //     var worker = new Worker("worker.js");
+   //
+   //     var msg = "这是来自主线程的通知";
+   //     worker.postMessage(msg);
+   //
+   //     worker.onmessage = function (e) {
+   //         console.log(e.data);
+   //         worker.terminate();
+   //         worker.postMessage('还有没被关闭');
+   //     };
+   //
+   //     worker.addEventListener('error', function (e) {
+   //         console.log([
+   //             'ERROR: Line ', e.lineno, ' in ', e.filename, ': ', e.message
+   //         ].join(''));
+   //     });
+   // }
+
+
+
+    // if(typeof(Worker)!=="undefined") {
+    //     var worker = new Worker("worker.js");
+    //
+    //     worker.onmessage = function (e) {
+    //         console.log(e.data);
+    //         document.getElementById("result").innerHTML += e.data+"<br/>";
+    //         // worker.terminate();
+    //     };
+    //
+    //     worker.addEventListener('error', function (e) {
+    //         console.log([
+    //             'ERROR: Line ', e.lineno, ' in ', e.filename, ': ', e.message
+    //         ].join(''));
+    //     });
+    // }
+    //
+    // document.getElementById("result").innerHTML +="this is end:"+new Date()+"<br/>";
+
+
+
+    //Transferable Objects 格式
+
+    if(typeof(Worker)!=="undefined") {
+        var worker = new Worker("worker.js");
+
+        // var buffer = new ArrayBuffer(1);
+        // worker.postMessage(buffer, [buffer]);
+
+        var buffer = new ArrayBuffer(32);
+        console.log(buffer);
+        worker.postMessage({
+            operation: 'list_all_users',
+            //ArrayBuffer object
+            input: buffer,
+            threshold: 0.8,
+        },[buffer]);
+        //test Transferable
+        console.log(buffer);
+
+        worker.onmessage = function (e) {
+            console.log(e.data)
+        };
+
+        worker.addEventListener('error', function (e) {
+            console.log([
+                'ERROR: Line ', e.lineno, ' in ', e.filename, ': ', e.message
+            ].join(''));
+        });
+    }
+
+
+
+
+    //woker里面建立worker
+
+    // if(typeof(Worker)!=="undefined"){
+    //     var worker = new Worker('mu-worker.js');
+    //     worker.onmessage = function (e) {
+    //         document.getElementById('result').innerText = e.data;
+    //     };
+    // }
+</script>
+
+</body>
+</html>
